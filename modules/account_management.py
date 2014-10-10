@@ -1,7 +1,7 @@
 # account management library
 # has login, signup,check nickname... request links
 
-from pymonogo import Connection
+# from pymonogo import Connection
 import json
 from datetime import datetime
 #imports for hashing
@@ -45,7 +45,7 @@ def signin(auth_id,db,nick_name,password):
   try:
     u=db.find_one({'nick_name':nick_name,'password':password})
     if(u!=None):
-      return {'cookie':nick_name+u[timestamp]}
+      return {'cookie':nick_name+'^'+u[timestamp]}
   except Exception:
     return {'msg':'SYSERROR'}
 
