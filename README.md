@@ -5,8 +5,11 @@ Pyhton backend for my server
 
 The major functions to be dealt with are:
 === This is for login related activites == 
+
 signup
+
 login
+
 checkNickName available
 
 === Async pings between the task to be done ===
