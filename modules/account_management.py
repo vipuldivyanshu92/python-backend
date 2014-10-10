@@ -22,21 +22,35 @@ def create_account(auth_id,nick_name,password,email,phone_num,dob):
     return {'msg':'Nice Try'}
   password=hash_password(password)
   account_exists=false;
-  if(users_collection.find_one({'nick_name':nick_name},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
-    return {'msg':'Nickname in use,click forgot password to retrive account'}
-  if(users_collection.find_one({'email':email},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
-    return {'msg':'Email in use, click forgot password to retrive account'}
-    
+  try:
+    if(users_collection.find_one({'nick_name':nick_name},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
+      return {'msg':'Nickname in use,click forgot password to retrive account'}
+    if(users_collection.find_one({'email':email},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
+      return {'msg':'Email in use, click forgot password to retrive account'}
+  except Exception:
+    print 'error in reading the database'
+    return {'msg':'SYSERROR'}
   timestamp=str(datetime.now())
   user={'nick_name':nick_name,'password':password,'email':email,'phone_num':phone_num,'dob':dob,'timestamp':timestamp}
   try:
     users_collection.insert(user)  
-    return {'msg':'SUCCESS'}
-  catch(Exception e):
-    return {'msg':'ERROR'}
+    return {'msg':'SUCCESS','timestamp':timestamp}
+  except Exception:
+    return {'msg':'SYSERROR'}
 
-def signin(auth_id,nick_name,password,email):
+def signin(auth_id,nick_name,password):
   if(auth_id != AUTH_ID):
     return {'msg':'Nice Try'}
   password=hash_password(password)
+  try:
+    u=users_collection.find_one({'nick_name':nick_name,'password':password})
+    if(u!=None):
+      return {'cookie':nick_name+u[timestamp]}
+  except Exception:
+    return {'msg':'SYSERROR'}
+
+def forgotpass(auth_id,email):
+  if(auth_id != AUTH_ID):
+    return {'msg':'Nice Try'}
+  ### Write send email of forgot password code
 
