@@ -14,6 +14,7 @@ checkNickName available
 
 === Async pings between the task to be done ===
 upload msg to server
+
 server pings the GCM service library
 ackmessage request
 ping to ask server for new msg
