@@ -10,14 +10,14 @@ import hashlib, uuid
 AUTH_ID=''
 
 # mongodb code
-connection=Connection()
-users_collection = connection.Giffie.users_collection
+# connection=Connection()
+# users_collection = connection.Giffie.users_collection
 def hash_password(password):
   salt = uuid.uuid4().hex
   hashed_password = hashlib.sha512(password + salt).hexdigest()
   return hashed_password
   
-def create_account(auth_id,nick_name,password,email,phone_num,dob):
+def create_account(auth_id,db,nick_name,password,email,phone_num,dob):
   if(auth_id != AUTH_ID):
     return {'msg':'Nice Try'}
   password=hash_password(password)
@@ -33,23 +33,23 @@ def create_account(auth_id,nick_name,password,email,phone_num,dob):
   timestamp=str(datetime.now())
   user={'nick_name':nick_name,'password':password,'email':email,'phone_num':phone_num,'dob':dob,'timestamp':timestamp}
   try:
-    users_collection.insert(user)  
+    db.insert(user)  
     return {'msg':'SUCCESS','timestamp':timestamp}
   except Exception:
     return {'msg':'SYSERROR'}
 
-def signin(auth_id,nick_name,password):
+def signin(auth_id,db,nick_name,password):
   if(auth_id != AUTH_ID):
     return {'msg':'Nice Try'}
   password=hash_password(password)
   try:
-    u=users_collection.find_one({'nick_name':nick_name,'password':password})
+    u=db.find_one({'nick_name':nick_name,'password':password})
     if(u!=None):
       return {'cookie':nick_name+u[timestamp]}
   except Exception:
     return {'msg':'SYSERROR'}
 
-def forgotpass(auth_id,email):
+def forgotpass(auth_id,db,email):
   if(auth_id != AUTH_ID):
     return {'msg':'Nice Try'}
   ### Write send email of forgot password code
