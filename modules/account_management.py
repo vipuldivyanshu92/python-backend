@@ -23,9 +23,9 @@ def create_account(auth_id,db,nick_name,password,email,phone_num,dob):
   password=hash_password(password)
   account_exists=false;
   try:
-    if(users_collection.find_one({'nick_name':nick_name},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
+    if(db.find_one({'nick_name':nick_name},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
       return {'msg':'Nickname in use,click forgot password to retrive account'}
-    if(users_collection.find_one({'email':email},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
+    if(db.find_one({'email':email},{'_id':1,'auth_id':1,'phone_num':1,'dob':1} != None ):
       return {'msg':'Email in use, click forgot password to retrive account'}
   except Exception:
     print 'error in reading the database'
